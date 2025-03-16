@@ -6,3 +6,6 @@ env:
 
 update: env
 	. env/bin/activate; pip install -r requirements.txt
+
+register:
+	python3 -m ipykernel install --user --name env --display-name "Python (CCO env)"
