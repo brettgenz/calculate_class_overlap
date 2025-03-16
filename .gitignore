@@ -1,6 +1,9 @@
 # data
 data/
 
+# API key
+notebooks/.env
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
