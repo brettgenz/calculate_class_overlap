@@ -6,6 +6,9 @@ import pandas as pd
 # load data frame with embeddings
 df = pd.read_pickle('./data/processed/train_with_embeddings.pkl')
 
+# load overlap matrix
+df_overlap = pd.read_csv('./data/processed/df_overlap.csv')
+
 # create the Dash app
 app = dash.Dash(__name__)
 
@@ -13,37 +16,62 @@ app = dash.Dash(__name__)
 unique_classes = df['category'].unique()
 dropdown_options = [{'label': str(cls), 'value': cls} for cls in unique_classes]
 
-# define the app layout - two dropdowns and a scatterplot
+# create plot of overlap matrix
+overlap_fig = px.imshow(df_overlap,
+                text_auto='.2f',
+                color_continuous_scale='RdYlGn_r',
+                aspect='auto',
+                title="Overlap Coefficient Heat Map",
+                height=600,
+                width=600,
+                template="ggplot2"
+                )
+
+overlap_fig.update_layout(title_x=0.5)
+overlap_fig.update_xaxes(tickangle=45)
+
+
+# define the app layout
 app.layout = html.Div([
-
-    html.H1("Embedding Viewer"),
-
-    # Parent container using flex display
+    # Overall page title
+    html.H1("Class Overlap Analysis", style={'textAlign': 'center'}),
+    # Parent container: two columns side by side.
     html.Div([
-        # Left side: Dropdowns container
+        # Left column: Overlap matrix
         html.Div([
-            html.Label("Select Class 1"),
-            dcc.Dropdown(
-                id='class1-dropdown',
-                options=dropdown_options,
-                value=unique_classes[0]
-            ),
-            html.Br(),
-            html.Label("Select Class 2"),
-            dcc.Dropdown(
-                id='class2-dropdown',
-                options=dropdown_options,
-                value=unique_classes[1] if len(unique_classes) > 1 else unique_classes[0]
+            dcc.Graph(
+                id='overlap-matrix',
+                figure=overlap_fig
             )
-        ], style={'width': '30%', 'padding': '20px'}),
-        
-        # Right side: Scatterplot container
+        ], style={'width': '50%', 'display': 'inline-block', 'verticalAlign': 'top', 'padding': '20px'}),
+        # Right column: Dropdowns and scatterplot
         html.Div([
+            # Dropdown container on top
+            html.Div([
+                html.Label("Select Class 1"),
+                dcc.Dropdown(
+                    id='class1-dropdown',
+                    options=dropdown_options,
+                    value=unique_classes[0]
+                ),
+                html.Br(),
+                html.Label("Select Class 2"),
+                dcc.Dropdown(
+                    id='class2-dropdown',
+                    options=dropdown_options,
+                    value=unique_classes[1] if len(unique_classes) > 1 else unique_classes[0]
+                )
+            ], style={'marginBottom': '20px'}),
+            # Scatterplot below the dropdowns
             dcc.Graph(id='scatter-plot')
-        ], style={'width': '70%', 'padding': '20px'})
-        
+        ], style={'width': '50%', 'display': 'inline-block', 'verticalAlign': 'top', 'padding': '20px'})
     ], style={'display': 'flex', 'flexDirection': 'row'})
 ])
+
+
+# set color options for points in scatterplot
+colors = ['orange', 'blue', 'purple', 'green', 'red']
+
 
 # callback function to update scatter plot based on selected classes
 @app.callback(
@@ -67,10 +95,11 @@ def update_scatterplot(class1, class2):
         x='x_2d',
         y='y_2d',
         color='category',
+        color_discrete_sequence=colors,
         title=f"Scatterplot of classes {class1} and {class2}",
         labels={'x_2d': 'X', 'y_2d': 'Y'},
-        height=800,
-        width=1000,
+        height=600,
+        width=800,
         template="ggplot2"
     )
 
