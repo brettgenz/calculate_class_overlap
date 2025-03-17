@@ -9,3 +9,6 @@ update: env
 
 register:
 	python3 -m ipykernel install --user --name env --display-name "Python (CCO env)"
+
+freeze:
+	. env/bin/activate; pip freeze > requirements.txt
