@@ -23,3 +23,5 @@ When we look at two topics we would think of as dissimilar, we see minimal overl
 ![Scatterplot of Two Dissimilar Topics](results/scatterplot_different_topics.png)
 
 The final output of this project is a Plotly dashboard that shows both the overlap matrix and an interactive scatterplot that can display any two classes of data from the data set. Run the script `src/embedding_dashboard.py` from the command line and then navigate a browser to the URL it supplies.
+
+![](results/class_overlap_analysis_dashboard.gif)
