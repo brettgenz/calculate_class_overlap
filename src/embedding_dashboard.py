@@ -7,7 +7,8 @@ import pandas as pd
 df = pd.read_pickle('./data/processed/train_with_embeddings.pkl')
 
 # load overlap matrix
-df_overlap = pd.read_csv('./data/processed/df_overlap.csv')
+df_overlap = pd.read_csv('./data/processed/df_overlap.csv', index_col=0)
+df_overlap = df_overlap.astype(float)
 
 # create the Dash app
 app = dash.Dash(__name__)
