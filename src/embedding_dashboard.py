@@ -19,16 +19,27 @@ dropdown_options = [{'label': str(cls), 'value': cls} for cls in unique_classes]
 # create plot of overlap matrix
 overlap_fig = px.imshow(df_overlap,
                 text_auto='.2f',
-                color_continuous_scale='RdYlGn_r',
+                color_continuous_scale=['white', 'darkred'],
                 aspect='auto',
-                title="Overlap Coefficient Heat Map",
-                height=600,
-                width=600,
+                # title="Overlap Coefficient Heat Map",
+                height=700,
+                width=900,
                 template="ggplot2"
                 )
 
 overlap_fig.update_layout(title_x=0.5)
-overlap_fig.update_xaxes(tickangle=45)
+overlap_fig.update_xaxes(
+    tickangle=315,
+    tickmode="array",
+    # tickvals=list(range(len(df_overlap.index))),
+    ticktext=sorted(list(unique_classes))
+    )
+overlap_fig.update_yaxes(
+    tickangle=315,
+    tickmode="array",
+    tickvals=list(range(len(df_overlap.index))),
+    ticktext=sorted(list(unique_classes))
+)
 
 
 # define the app layout
@@ -39,29 +50,42 @@ app.layout = html.Div([
     html.Div([
         # Left column: Overlap matrix
         html.Div([
+            
+            html.H3("Overlap Coefficient Heat Map", style={'textAlign': 'center'}),
+            html.H4("Darker red indicates greater overlap between classes", style={'textAlign': 'center'}),
+
             dcc.Graph(
                 id='overlap-matrix',
                 figure=overlap_fig
             )
-        ], style={'width': '50%', 'display': 'inline-block', 'verticalAlign': 'top', 'padding': '20px'}),
+        ], style={'width': '50%', 'display': 'inline-block', 'verticalAlign': 'top', 'padding': '10px'}),
         # Right column: Dropdowns and scatterplot
         html.Div([
-            # Dropdown container on top
+            
+            html.H3("Embedding Viewer", style={'textAlign': 'center'}),
+            html.H4("Select two classes to view embedding distribution", style={'textAlign': 'center'}),
+            
+            # Dropdown boxes on top, side-by-side
             html.Div([
-                html.Label("Select Class 1"),
-                dcc.Dropdown(
-                    id='class1-dropdown',
-                    options=dropdown_options,
-                    value=unique_classes[0]
-                ),
-                html.Br(),
-                html.Label("Select Class 2"),
-                dcc.Dropdown(
-                    id='class2-dropdown',
-                    options=dropdown_options,
-                    value=unique_classes[1] if len(unique_classes) > 1 else unique_classes[0]
-                )
-            ], style={'marginBottom': '20px'}),
+                html.Div([
+                    html.Label("Select Class 1"),
+                    dcc.Dropdown(
+                        id='class1-dropdown',
+                        options=dropdown_options,
+                        value=unique_classes[0]
+                    )
+                ], style={'width': '45%', 'display': 'inline-block', 'padding': '10px'}),
+
+                html.Div([
+                    html.Label("Select Class 2"),
+                    dcc.Dropdown(
+                        id='class2-dropdown',
+                        options=dropdown_options,
+                        value=unique_classes[1] if len(unique_classes) > 1 else unique_classes[0]
+                    )
+                ], style={'width': '45%', 'display': 'inline-block', 'padding': '10px'})
+            ], style={'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'center'}),
+
             # Scatterplot below the dropdowns
             dcc.Graph(id='scatter-plot')
         ], style={'width': '50%', 'display': 'inline-block', 'verticalAlign': 'top', 'padding': '20px'})
@@ -70,7 +94,7 @@ app.layout = html.Div([
 
 
 # set color options for points in scatterplot
-colors = ['orange', 'blue', 'purple', 'green', 'red']
+colors = ['orange', 'blue', 'green', 'purple', 'red']
 
 
 # callback function to update scatter plot based on selected classes
@@ -96,10 +120,10 @@ def update_scatterplot(class1, class2):
         y='y_2d',
         color='category',
         color_discrete_sequence=colors,
-        title=f"Scatterplot of classes {class1} and {class2}",
+        # title=f"Scatterplot of classes {class1} and {class2}",
         labels={'x_2d': 'X', 'y_2d': 'Y'},
         height=600,
-        width=800,
+        width=900,
         template="ggplot2"
     )
 
