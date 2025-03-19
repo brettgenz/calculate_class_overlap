@@ -4,11 +4,9 @@ import pytest
 import tiktoken
 from unittest.mock import patch, MagicMock
 
-# Ensure the src folder is on the Python path
-relative_path = os.path.abspath('.')
-sys.path.append(relative_path)
+sys.path.append(os.path.join(os.path.dirname(__file__), '../src'))
 
-from src.embedding_functions import *
+from embedding_functions import truncate_text, get_embedding
 
 
 def test_truncate_text_no_truncation():
@@ -29,19 +27,19 @@ def test_truncate_text_truncation():
     assert len(tokens) <= max_tokens
 
 
-# @patch('embedding_functions.client')
-# def test_get_embedding(mock_client):
-#     """Test that get_embedding returns a dummy embedding."""
-#     # Create a dummy embedding and configure the mock response
-#     dummy_embedding = [0.1, 0.2, 0.3]
-#     mock_response = MagicMock()
-#     mock_obj = MagicMock()
-#     mock_obj.embedding = dummy_embedding
-#     mock_response.data = [mock_obj]
-#     mock_client.embeddings.create.return_value = mock_response
+@patch('embedding_functions.client')
+def test_get_embedding(mock_client):
+    """Test that get_embedding returns a dummy embedding."""
+    # Create a dummy embedding and configure the mock response
+    dummy_embedding = [0.1, 0.2, 0.3]
+    mock_response = MagicMock()
+    mock_obj = MagicMock()
+    mock_obj.embedding = dummy_embedding
+    mock_response.data = [mock_obj]
+    mock_client.embeddings.create.return_value = mock_response
 
-#     text = "Test text for embedding."
-#     result = get_embedding(text)
+    text = "Test text for embedding."
+    result = get_embedding(text)
 
-#     assert result == dummy_embedding
-#     mock_client.embeddings.create.assert_called()
+    assert result == dummy_embedding
+    mock_client.embeddings.create.assert_called()
