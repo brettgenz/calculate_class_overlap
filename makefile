@@ -12,3 +12,6 @@ register:
 
 freeze:
 	. env/bin/activate; pip freeze > requirements.txt
+
+test:
+	. env/bin/activate; pytest -vvx
