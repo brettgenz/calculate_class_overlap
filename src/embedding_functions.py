@@ -1,12 +1,9 @@
-# This file imports the raw text along with each text's respective category. This assumes the user
-# has already downloaded the file and saved it in the './../data/raw/' folder.
-
 import os
 import openai
 import tiktoken
 import dotenv
 
-dotenv.load_dotenv()
+dotenv.load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', 'notebooks', '.env'))
 
 
 # establish OpenAI session

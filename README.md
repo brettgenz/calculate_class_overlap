@@ -6,7 +6,7 @@ I calculate a kernel density estimate for each class and for each pair of classe
 My data source for this project was the Usenet News20 data set, available here:
 http://qwone.com/~jason/20Newsgroups/20news-bydate.tar.gz
 
-The data set contains different categories of news articles and serves as a good test case for my purposes. I downloaded the raw data manually and stored it in the `data/raw/` folder. My data processing steps are in the `data_prep.ipynb` notebook, and the preprocessed data objects are in the `data/processed/` folder. 
+The data set contains different categories of news articles and serves as a good test case for my purposes. I downloaded the raw data manually and stored it in the `data/raw/` folder. My data processing steps are in the `data_prep.ipynb` notebook, including generating embeddings with the OpenAI API, and the preprocessed data objects are in the `data/processed/` folder. 
 
 Here is an example of the overlap matrix:
 
