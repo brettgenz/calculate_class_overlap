@@ -1,6 +1,5 @@
 import os
 import sys
-import pytest
 import tiktoken
 from unittest.mock import patch, MagicMock
 
