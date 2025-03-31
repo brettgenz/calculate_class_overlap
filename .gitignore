@@ -4,6 +4,9 @@ data/
 # API key
 notebooks/.env
 
+# vscode folder
+.vscode/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
